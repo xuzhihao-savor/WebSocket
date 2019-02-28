@@ -1,0 +1,299 @@
+syntax = "proto2";
+option java_package = "battleapp.netproto";
+import "struct.proto";
+
+package NetMsg;
+
+// 注释请用 /** XXXX */ JavaDoc格式生成的时候才可以生成代码注释
+
+/** 请求比赛信息 */
+message CS_AskMatchGameInfo {
+	/** 比赛玩家信息 */
+    required iPlayerInfo playerInfo= 1;  
+    /** 登陆信息 */
+    required iLoginInfo loginInfo = 2; 
+}
+
+/**
+ * 游戏加载(客户端,服务器只做转发)
+ */
+message CS_MatchGameLoad {
+    /** 用户id */
+    required int32 playerid = 1;
+    /** 客户端进度 */
+    required int32 progress = 2;
+}
+
+/**
+  * 游戏退出
+  */
+message CS_MatchGameExit {
+
+}
+
+message CS_HeartTick {
+    required int64 sendTime = 1;
+}
+
+message SC_HeartTickRet {
+    required int64 sendTime = 1;
+    required int32 serverTime = 2;
+}
+
+/** 测试移动消息 */
+message CS_TestMove {
+
+}
+
+message CS_Cheat {
+    required string command = 1;
+    required int32 itemId = 2;
+    required int32 count = 3;
+}
+
+message CS_PrepareUseSkill {
+    required int32 skillId = 1;
+}
+
+message SC_PrepareUseSkillRet {
+    required int32 skillId = 1;
+    required bool success = 2;
+    required int32 serverTime = 3;
+}
+
+message CS_CancelPrepareUseSkill {
+    required int32 skillId = 1;
+}
+
+message CS_UseSkill {
+    /** 技能id */
+    required int32 id = 1;
+    /** 位置 */
+    required int32 x = 2;
+    required int32 y = 3;
+    /** 客户端本地时间 */
+    required int64 sendTime = 4;
+}
+
+message SC_UseSkillRet {
+    /** 单位id */
+    required int32 unitid = 1;
+    /** 技能id */
+    required int32 skillid = 2;
+    /** 使用时间 */
+    //required int32 useTime = 3;
+    /** 是否成功，true表示成功 */
+    required bool success = 4;
+    /** cd结束时间 */
+    required int32 cdEndTime = 5;
+    /** 原始技能id */
+    required int32 originalSkillId = 6;
+    /** 客户端本地时间 */
+    required int64 sendTime = 7;
+    required int32 serverTime = 8;
+}
+
+
+/**
+ * 引导时，使用的技能
+ */
+message CS_GuideUseSkill {
+    /** 技能发起单位 */
+    required int32 unitid = 1;
+    /** 使用的技能 */
+    required CS_UseSkill useSkill = 2;
+}
+
+message SC_GuideUseSkillRet {
+    required bool success = 1;
+    required int32 serverTime = 2;
+}
+
+/**
+ * 引导指令
+ */
+message CS_GuideCmd {
+    required int32 unitid = 1;
+    required iGuideCmd cmd = 2;
+    repeated int32 data = 3;
+}
+
+message SC_GuideCmdRet {
+    required bool success = 1;
+    required int32 serverTime = 2;
+}
+
+message CS_ReplaceSkill {
+    /** 移除的id */
+    required int32 id = 1;
+}
+
+message CS_UpSkillLevel {
+    required int32 skillId = 1;
+}
+
+message SC_UpSkillLevelRet {
+    required int32 skillId = 1;
+    required bool success = 2;
+    required int32 serverTime = 3;
+}
+
+message CS_ServerTimeSync {
+    /** 客户端本地时间 */
+    required int64 localTime = 1;
+}
+
+message SC_ServerTimeSyncRet {
+    /** 客户端本地时间 */
+    required int64 localTime = 1;
+    /** 服务器时间 */
+    required int32 serverTime = 2;
+}
+
+message CS_PlaybackRecords {
+
+}
+
+message SC_PlaybackRecords {
+    required bytes records = 1;
+    required int32 serverTime = 2;
+}
+
+/** 游戏加入 */
+message SC_NotifyGameJoin {
+    /** 错误码【0表示成功， 其它失败】 */
+    required int32 code = 1;
+    /** 比赛id */
+    optional int64 gameid = 2;
+    optional int32 mapid = 3;
+    /** 游戏玩家信息 */
+    repeated iAvatarInfo playerInfos = 4;
+    /** 高亮道具index */
+    optional int32 lootPoolIdx = 5;
+    required int32 serverTime = 6;
+}
+
+/**
+ * 游戏取消
+ */
+message SC_NotifyGameCancel {
+    /** 用户id */
+    required int64 gameid = 1;
+    required int32 serverTime = 2;
+}
+
+/** 游戏初始化 */
+message SC_NotifyGameInit {
+    /** 比赛id */
+    required int64 gameid = 1;
+    required int32 mapid = 2;
+    /** 游戏玩家信息 **/
+    repeated iAvatarInfo playerInfos = 3;
+    required int32 serverTime = 4;
+    required int32 gameStartTime = 5;
+}
+
+/**
+ * 游戏当前阶段（毒圈，安全区，等待时间）
+ */
+message SC_NotifyGameStage {
+    required int32 uuid = 1;
+    required int32 posionR = 2;
+    required iPos posionPos = 3;
+    required int32 safeR = 4;
+    required iPos safePos = 5;
+    required int32 startTime = 6;
+    required int32 endTime = 7;
+    required int32 serverTime = 8;
+}
+
+/** 效果结构 **/
+message SC_NotifyEffectInfo {
+    required int32 effectuid = 1;
+    required int32 effectid = 2;
+    /** 0 瞬发，  > 0 持续事件毫秒，  < 0 , 无限循环 */
+    required int32 livetime = 3;
+    optional iPos startpos = 4;
+    optional iPos targetPos = 5;
+    repeated int32 params = 6;
+    required int32 serverTime = 7;
+}
+
+/**
+ * 游戏加载(客户端,服务器只做转发)
+ */
+message SC_NotifyGameLoad {
+    /** 用户id */
+    required int32 playerid = 1;
+    /** 客户端进度 */
+    required int32 progress = 2;
+    required int32 serverTime = 3;
+}
+
+message SC_NotifyKill {
+    /** 击杀时间 */
+    required int32 time = 1;
+    /** 击杀者id */
+    required int32 killerId = 2;
+    /** 被杀者id */
+    required int32 bekilledId = 3;
+    /** 击杀坐标 */
+    required iPos pos = 4;
+    /** 剩余生存玩家数量 */
+    required int32 liveCount = 5;
+    /** 被击杀者排名 */
+    required int32 ranking = 6;
+    /** 本次击杀评分 */
+    required int32 killScore = 7;
+    required int32 serverTime = 8;
+}
+
+message SC_NotifyUnitAddGroup {
+    repeated iUnitAdd units = 1;
+    required int32 serverTime = 2;
+}
+
+/**
+ * 单位移除的时候触发
+ */
+message SC_NotifyUnitDel {
+    required int32 id = 1;
+    required int32 serverTime = 2;
+}
+
+message SC_NotifyBattleResult {
+    /** 被击杀人的uuid */
+    required int32 unitid = 1;
+    /** 胜者id */
+    required int32 winnerPlayerId = 2;
+    /** 击杀数量 */
+    required int32 killNum = 3;
+    /** 排名 */
+    required int32 rank = 4;
+    /** 最新elo值 */
+    required int32 elo = 5;
+    /** 玩家评分 */
+    required int32 score = 6;
+    required int32 serverTime = 7;
+	/** 获取的奖励物品 */
+	repeated iAwardItem awardItems = 8;
+}
+
+/** 把地块的属性打包到一起 */
+message SC_NotifyCellUnitPropertyGroup {
+    repeated iCellUnitPropertyChange cells = 1;
+    required int32 serverTime = 2;
+}
+
+/** 把地块的属性打包到一起 */
+message SC_NotifyCellUnitPropertyGroupAll {
+    repeated iCellUnitPropertyChangeAll cells = 1;
+    required int32 serverTime = 2;
+}
+
+/** 玩家属性变化 */
+message SC_NotifyPlayerPropertyChange {
+    required int32 unitid = 1;
+    repeated iProt prots = 2;
+    required int32 serverTime = 3;
+}

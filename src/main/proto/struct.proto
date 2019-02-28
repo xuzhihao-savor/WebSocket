@@ -1,0 +1,296 @@
+syntax="proto2";
+option java_package = "battleapp.netproto";
+package NetMsg;
+
+message iAvatarInfo {
+    /** 用户id */
+    required int32 playerid = 1;
+    /**  用户名字 */
+    required string name = 2;
+    /**  游戏角色id */
+    required int32 charid = 3;
+    /**  游戏角色等级 */
+    required int32 rolelevel = 4;
+    required int32 elo = 5;
+    required int32 progress = 6;
+    repeated int32 equips = 7;
+}
+
+
+
+/**匹配玩家基本信息 */
+message iPlayerInfo {
+    /** 带入比赛的基础信息 */
+    required iAvatarInfo avatar = 1;
+    /** 加入房间的密钥 */
+    required string joinkey = 2;
+}
+
+/**匹配服发送给战斗服的信息 */
+message iLoginInfo {
+    required int64 sid = 1;
+    required int64 gameid = 2;
+    required int32 mapid = 3;
+    required int64 time = 4;
+    required int32 rmode = 5;
+    required string link = 6;
+    required int32 size = 7;
+    required int32 timeout = 8;
+    required bool isGuide = 9;
+    required int32 robotelo = 10;
+}
+
+message iPos {
+    required int32 x = 1;
+    required int32 y = 2;
+}
+
+/**
+ * 单位信息
+ * 单位进入事业的时候初始化的信息
+ */
+message iUnitAdd {
+    required int32 playerid = 1;
+    required string playername = 2;
+    required int32 charid = 3;
+    required int32 unitid = 4;
+    required int32 atk = 5;
+    required int32 hp = 6;
+    required int32 state = 7;
+    required int32 camp = 8;
+}
+
+/** 地块的属性变化 */
+message iCellUnitPropertyChange {
+    required int32 x = 1;
+    required int32 y = 2;
+    repeated iProt prots = 3;
+}
+
+message iCellUnitPropertyChangeAll {
+    required int32 x = 1;
+    required int32 y = 2;
+    optional  iProtGrass grass = 3;
+    optional iProtItem item = 4;
+    optional iPoisonState poison = 5;
+    optional iProtIntArrayArray object = 6;
+    optional iProtIntArrayArray staticObject = 7;
+}
+
+/** 属性 */
+message iProt {
+    required int32 id = 1;
+    /** 二进制，根据id再做一次pb解析 */
+    required bytes vals = 2;
+    /** 调试数据*/
+    optional string dbgv = 3;
+}
+
+/** 整数属性 */
+message iProtInt {
+    required int32 val = 1;
+}
+
+/** 数组属性 */
+message iProtIntArray {
+    repeated int32 val = 1;
+}
+
+/** 数组的数组属性 */
+message iProtIntArrayArray {
+    repeated iProtIntArray val = 1;
+}
+
+message iProtPosType {
+    required int32 x = 1;
+    required int32 y = 2;
+    required iMoveType type = 3;
+}
+
+message iProtTeleportTime {
+    required int32 start = 1;
+    required int32 finish = 2;
+}
+
+message iProtSkillItem {
+    /** 技能id */
+    required int32 id = 1;
+	/** 是否激活 */
+    required bool active = 2;
+    /** 等级或弹药 */
+    required int32 value = 3;
+	/** 碎片数量 */
+    required int32 num = 4;
+    required int32 cdEndTime = 5;
+}
+
+message iProtSkillItems {
+    repeated iProtSkillItem items = 1;
+}
+
+message iProtBufValue {
+    required iBufAtomType type = 1;
+    required int32 value = 2;
+}
+
+message iProtBufAtom {
+    required int32 bufUid = 1;
+    required int32 bufId = 2;
+    repeated iProtBufValue values = 3;
+}
+
+message iProtPlayerBuf {
+    repeated iProtBufAtom values = 3;
+}
+
+message iProtGrass {
+    required int32 level = 1;
+    required int32 nextGrowTime = 2;
+}
+
+message iProtItem {
+    required int32 id = 1;
+    required int32 num = 2;
+}
+
+message iAwardItem {
+    required int32 id = 1;
+    required int32 num = 2;
+}
+
+message iProtPlayerState {
+    required iPlayerState state = 1;
+    required int32 skillId = 2;
+    required int32 level = 3;
+    required int32 startTime = 4;
+    required int32 lastTime = 5;
+    required iPos castPos = 6;
+    required iPos attackPos = 7;
+}
+
+enum iGuideCmd {
+    /** data数据：坐标x、坐标y、物品id、物品数量 */
+    CMD_NEW_ITEM = 1;
+    /** data数据：技能id、技能等级 */
+    CMD_NEW_SKILL = 2;
+    /** data数据：坐标x、坐标y */
+    CMD_TELEPORT = 3;
+    /** data数据：generator id */
+    CMD_START_AIRDROP = 4;
+    /** data数据：暴露值，如果要清0就填0 */
+    CMD_SET_EXPOSEVALUE = 5;
+    CMD_KILL = 6;
+}
+
+enum iBufAtomType {
+    ETYPE_EXPOSE = 1;
+}
+
+enum iMoveDir {
+    UNKNOWN = 0;
+    UP = 1;
+    DOWN = 2;
+    LEFT = 3;
+    RIGHT = 4;
+}
+
+enum iMapItemObjectState {
+    /** 没有 */
+    NONE = 0;
+    /** 普通 */
+    NORMAL = 1;
+    /** 激活 */
+    ACTIVE = 2;
+}
+
+/** 腐蚀状态 */
+enum iPoisonState {
+    /** 没有腐蚀 */
+    POIS_NONE = 0;
+    /** 开始腐蚀 */
+    POIS_START = 1;
+    /** 已腐蚀 */
+    POIS_FINISH = 2;
+    /** 安全区 */
+    POIS_SAFE = 3;
+}
+
+enum iPlayerState {
+    /** 普通状态 */
+    PS_NORMAL = 0;
+    /** 技能引导（蓄力） */
+    PS_LEADING = 1;
+    /** 释放技能阶段1，前摇状态 */
+    PS_SKILL_SEC1 = 2;
+    /** 释放技能阶段2，硬直状态 */
+    PS_SKILL_SEC2 = 3;
+    /** 防御状态（受击后飞向旁边格子） */
+    PS_DEFINCE = 4;
+    /** 死亡 */
+    PS_DEAD = 5;
+}
+
+enum iExposeState {
+    /** 完全隐藏 */
+    SHOW_EXPOSURE_NONE = 1;
+    /** 黑人 */
+    SHOW_EXPOSURE_BLACKMAN = 3;
+    /** 完全暴露 */
+    SHOW_EXPOSURE_FULL = 4;
+}
+
+enum iMoveType {
+    /** 平滑移动 */
+    SMOOTH = 1;
+    /** 瞬间移动 */
+    BLINK = 2;
+}
+
+enum iPropertyType {
+    /** 玩家hp iProtInt*/
+    PLAYER_HP = 1;
+    /** 玩家攻击力 iProtInt*/
+    PLAYER_ATK = 2;
+    /** 玩家经验 iProtInt*/
+    PLAYER_EXP = 3;
+    /** 传送状态 iProtTeleportTime*/
+    TELEPORT_STATE = 19;
+    /** 玩家位置 iProtPosType*/
+    PLAYER_POS = 17;
+    /** 玩家速度 iProtInt*/
+    PLAYER_SPEED = 6;
+    /** 玩家收集时间 iProtInt*/
+    PLAYER_COLLECTTIME = 7;
+    /** 玩家暴露值 iProtInt*/
+    PLAYER_EXPOSURE = 8;
+    /** 玩家等级 iProtInt*/
+    PLAYER_LEVEL = 9;
+    /** 玩家状态 iProtPlayerState*/
+    PLAYER_STATE = 20;
+    /** 暴露值状态 iProtInt*/
+    PLAYER_EXPOSE_STATE = 12;
+    /** 技能状态 iProtSkillItems*/
+    PLAYER_SKILL = 13;
+    /** 玩家朝向 iProtInt*/
+    PLAYER_DIR = 14;
+    /** 玩家buf iProtPlayerBuf*/
+    PLAYER_BUF = 15;
+    /** 玩家开箱子 iProtInt*/
+    PLAYER_OPENCHEST = 16;
+    /** 通用技能碎片 iProtInt*/
+    PLAYER_SKILL_CHIP = 21;
+	/** 体力值 iProtInt*/
+    PLAYER_VIT = 22;
+	
+    /** 地图格上的东西 */
+    /** 草丛高度 iProtGrass */
+    GRASS_HEIGHT = 100;
+    /** 道具 iProtItem */
+    ITEM = 101;
+    /** 腐蚀 iProtInt */
+    POISON = 102;
+    /** 物品 iProtIntArrayArray */
+    OBJECTS = 103;
+    /** 静态物件（喷漆）iProtIntArrayArray */
+    STATIC_PAINT = 104;
+}

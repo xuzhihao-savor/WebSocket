@@ -1,0 +1,21 @@
+2019_01_28_11-DEBUG :  linkid: WSL2, cmd: 1
+    recive : {"cmd":1,"info":{"name":"zhw"}}
+//登录回复
+2019_01_28_11-DEBUG :  linkid: WSL2, cmd: 2001
+    send : {"cmd":2001,"info":{"baseinfo":{"uid":91257395,"open_uid":"","name":"zhw","icon":"","elo":1436,"use_role":103003,"roles":[{"role":103003,"level":0},{"role":103005,"level":0},{"role":103001,"level":0}],"statistics":{"113001":{"skinfo":{"119102":1},"roleinfo":{"0":5,"103005":8},"rank":[null,5,9],"killed":1,"topkilled":1,"demage":14,"moved":128,"level":15,"racetime":862263,"tot":14},"113006":{"skinfo":{},"roleinfo":{"0":3,"103001":4,"103005":8},"rank":[null,1,null,null,null,1,null,6,7],"killed":8,"topkilled":5,"demage":140,"moved":438,"level":18,"racetime":1326404,"tot":15}},"stateInfo":{"state":0},"guide":50,"items":[{"id":120002,"num":48029},{"id":120303,"num":1},{"id":120302,"num":1},{"id":120301,"num":1},{"id":120304,"num":1},{"id":120307,"num":1}],"equips":{"2":120303},"orderMap":{},"codeGroup":{},"offline_cache":[],"register_time":1548121964436,"last_login_time":1548647749337,"online_time":300760087},"mails":{},"tasks":{"220001":{"id":"220001","type":0,"value":3,"reward":1,"time":1548121964436},"220002":{"id":"220002","type":1,"value":0,"reward":0,"time":1548121964436},"220003":{"id":"220003","type":1,"value":0,"reward":0,"time":1548121964436},"220004":{"id":"220004","type":2,"value":0,"reward":0,"time":1548639378963}},"sid":18092,"user_info":{}},"_sys_":{"plt":"none","id":18092}}
+
+
+//进入匹配
+2019_01_28_11-DEBUG :  linkid: WSL2, cmd: 3
+    recive : {"cmd":3,"info":{"mapId":113001}}
+//进入匹配回复
+2019_01_28_11-DEBUG :  linkid: WSL2, cmd: 2005
+    send : {"cmd":2005,"succ":true,"info":{},"_sys_":{"plt":"none","id":18092}}
+//匹配成功回复
+2019_01_28_11-DEBUG :  linkid: WSL2, cmd: 2003
+    send : {"cmd":2003,"info":{"gameid":307580554000,"mapid":113001,"time":1548647580554,"rmode":0,"link":"ws://192.168.0.9:11117/ws","size":1,"timeout":50000,"robotelo":1436,"extlist":{"91257395":{"role":103003}},"sid":18092,"elo":1436},"_sys_":{"plt":"none","id":18092}}
+
+
+//退出匹配
+2019_01_28_11-DEBUG :  linkid: WSL2, cmd: 4
+    recive : {"cmd":4,"info":{}}
